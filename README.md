@@ -109,11 +109,13 @@ internet_service_type                 | 4225 non-null   object | customer intern
 ### Acquire
 > Acquired zillow 2017 data from appropriate sources
 * Create local .csv of raw data upon initial acquisition for later use
-> Univariate exploration: 
-* Basic histograms for categories
+* Take care of any null values -> Decide on impute or elimination
 > Add appropriate artifacts into `wrangle.py`
 
 ### Prepare
+> Univariate exploration: 
+* Basic histograms/boxplot for categories
+> Took care of outliers
 > Handle any possible threats of data leakage
 > Create dummy vars
 > Split data
@@ -123,11 +125,12 @@ internet_service_type                 | 4225 non-null   object | customer intern
 
 ### Explore
 > Bivariate exploration
-* Investigate and visualize *all* features against target variable
+* Investigate and visualize *all* features against home value
 > Identify possible areas for feature engineering
 * 
 > Multivariate:
-* Visuals exploring features as they relate to churn
+* Visuals exploring features as they relate to home value
+> Statistical Analysis:
 * Answer questions from *Initial Questions and Hyptheses* 
 * Answer questions from *Univariate* and *Bivariate* exploration
 > Collect and collate section *Takeaways*

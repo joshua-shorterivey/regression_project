@@ -97,7 +97,9 @@ def prep(df):
         df: dataframe to perform desired operations on
 
     Returns
-        train, validate, and test datasets
+        adjusted dataframe
+        train, validate, and test subsets
+        scaled versions of train, validate, and test subsets
     """
 
     #change county fips codes to county names
