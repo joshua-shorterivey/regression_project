@@ -47,6 +47,33 @@ def acquire_zillow():
 
     return df
 
+#engineer features
+def engineer_features(df):
+    """
+    """
+    
+    #### Decades: 
+    #create list to hold labels for decades
+    decade_labels = [x + 's' for x in np.arange(1870, 2030, 10)[:-1].astype('str')]
+
+    #assign decades created from range to new decades column in dataset and apply labels
+    df['decades'] = pd.cut(df.year_built, np.arange(1870, 2030, 10), labels=decade_labels, ordered=True)
+    #age 
+    df['home_age'] = (2022 - df.year_built).astype('int')
+
+    #### Home Size
+    #use quantiles to calculate subgroups and assign to new column
+    q1, q3 = df.area.quantile([.25, .75])
+    df['home_size'] = pd.cut(df.area, [0,q1,q3, df.area.max()], labels=['small', 'medium', 'large'], right=True)
+
+    #### Estimated Tax Rate
+    df['est_tax_rate'] = df.tax_amount / df.home_value
+
+    #remove columns
+    df = df.drop(columns=['year_built', 'tax_amount'])
+
+    return df
+
 # function for removing outliers
 def remove_outliers(df, k, col_list):
     """ 
@@ -105,12 +132,14 @@ def prep(df):
     #change county fips codes to county names
     df.county = df.county.map({6037: 'LA County', 6059: 'Orange County', 6111: 'Ventura County'})
 
+    #engineer features
+    df = engineer_features(df)
+
     #remove outliers
-    df = remove_outliers(df, 1.5, ['bedrooms', 'bathrooms', 'area', 'home_value', 'tax_amount'])
+    df = remove_outliers(df, 1.5, ['bedrooms', 'bathrooms', 'area', 'home_value', 'home_age', 'est_tax_rate'])
 
     #change datatypes of categorical columns
     df.county = df.county.astype('object')
-    df.year_built = df.year_built.astype('int').astype('object')
 
     #train_test_split
     train_validate, test = train_test_split(df, test_size=.2, random_state=514)
@@ -125,7 +154,7 @@ def prep(df):
     test_scaled =  test.copy(deep=True)
 
     #create list of numeric columns for scaling
-    num_cols = train.select_dtypes(exclude='object')
+    num_cols = train.select_dtypes(include='number')
 
     #fit to data
     scaler.fit(num_cols)
@@ -152,7 +181,7 @@ def prep(df):
     plt.figure(figsize=(20,5))
     i=1
 
-    for col in df.drop(columns=['county', 'year_built']).columns:
+    for col in df.select_dtypes(include='number').columns:
     
         plt.subplot(1, len(df.columns), i)
         sns.boxplot(data=df[col])
