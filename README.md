@@ -40,14 +40,14 @@
 
 |Feature|Datatype|Definition|
 |:-----|:-----|:-----|
-bathrooms       | 4225 non-null   float64 | customer company identification code
-bedrooms        | 4225 non-null   float64 | customer gender 
-county          | 4225 non-null   object  | customer status as senior citizen
-area            | 4225 non-null   float64 | customer partner status
-home_size       | 4225 non-null   object | customer dependent status
-home_age        | 4225 non-null   int64  | customer tenure in months
-decades         | 4225 non-null   object | customer phone service status
-est_tax_rate    | 4225 non-null   float64 | customer subscription to multiple phone lines
+bathrooms       | 4225 non-null   float64 | number of bathrooms in home
+bedrooms        | 4225 non-null   float64 | number of bedrooms in home
+county          | 4225 non-null   object  | county of home based on FIPS code
+area            | 4225 non-null   float64 | area of home in calculated square feet
+home_size       | 4225 non-null   object | size of home grouped in category by square feet
+home_age        | 4225 non-null   int64  | age of home
+decades         | 4225 non-null   object | decade in which home was constructed
+est_tax_rate    | 4225 non-null   float64 | calculated estimnated tax rate bbased on home value and paid tax
 
 
 
@@ -146,25 +146,21 @@ ${\alpha}$: .05
 > Set Baseline Prediction and evaluate accuracy  
 > Explore various models and feature combinations.
 * For initial M.V.P of each model include only `area`, `bedrooms`, `bathrooms` as features
-> Ordinary Least Squares
-* 
-> LASSO + LARS
-* 
-> Polynomial Regression
-* Alternated through combinations of:
-    - Powers ~ 2, 3
-    - Features ~ Feature Sets 
-> Generalized Linear Model
-* 
-
-> Choose **three** models to validate
-* 
+>Three Best Models ran on Validation Set
+* Polynomials 2 
+    - Degrees: 3
+    - Features: All
+* Polynomial 12
+    - Degrees: 3
+    - Fetures: estimated tax rate, area, home age, and county
+* Polynomial 10
+    - Degrees: 3
+    - Features: estimated tax rate, area, bathrooms, home age, and county
 
 >Choose **one** model to test
-> MVP Model: Polynomial 2
-* Features: Area, Bedrooms, Bathrooms
-* Polynomial Features Degree: 3
-* Score (r^2): .24
+* Polynomial 10
+    - Degrees: 3
+    - Features: estimated tax rate, area, bathrooms, home age, and county
 > Collect and collate section *Takeaways*
 
 ### Deliver
