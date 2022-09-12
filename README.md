@@ -36,66 +36,65 @@
 ## Data Dictionary
 |Target|Datatype|Definition|
 |:-----|:-----|:-----|
-|taxvaluedollarcnt|xxx non-null: uint8| property tax assessed values
+|home_value|xxx non-null: uint8| property tax assessed values
 
 |Feature|Datatype|Definition|
 |:-----|:-----|:-----|
-customer_id                           | 4225 non-null   object | customer company identification code
-gender                                | 4225 non-null   object | customer gender 
-senior_citizen                        | 4225 non-null   int64  | customer status as senior citizen
-partner                               | 4225 non-null   object | customer partner status
-dependents                            | 4225 non-null   object | customer dependent status
-tenure                                | 4225 non-null   int64  | customer tenure in months
-phone_service                         | 4225 non-null   object | customer phone service status
-multiple_lines                        | 4225 non-null   object | customer subscription to multiple phone lines
-online_security                       | 4225 non-null   object | customer online security service status
-online_backup                         | 4225 non-null   object | customer online backup service status
-device_protection                     | 4225 non-null   object | customer device protection service status
-tech_support                          | 4225 non-null   object | customer tech support service status
-streaming_tv                          | 4225 non-null   object | customer streaming tv service status
-streaming_movies                      | 4225 non-null   object | customer streaming movie service status
-paperless_billing                     | 4225 non-null   object | customer paperless billing status
-monthly_charges                       | 4225 non-null   float64| customer monthly charges
-total_charges                         | 4216 non-null   float64| customer total charges
-churn                                 | 4225 non-null   object | customer churn status
-contract_type                         | 4225 non-null   object | customer contract type
-payment_type                          | 4225 non-null   object | customer payment type
-internet_service_type                 | 4225 non-null   object | customer internet service 
+bathrooms       | 4225 non-null   float64 | customer company identification code
+bedrooms        | 4225 non-null   float64 | customer gender 
+county          | 4225 non-null   object  | customer status as senior citizen
+area            | 4225 non-null   float64 | customer partner status
+home_size       | 4225 non-null   object | customer dependent status
+home_age        | 4225 non-null   int64  | customer tenure in months
+decades         | 4225 non-null   object | customer phone service status
+est_tax_rate    | 4225 non-null   float64 | customer subscription to multiple phone lines
+
 
 
 ## Initial Questions and Hypotheses
+> Is there difference in median home value between counties?  
+
+${H_0}$: There is no significant difference in median home value between counties   
+
+${H_a}$: There is significant difference in median home value between counties    
+
+${\alpha}$: .05
+
+> Result: There is enough evidence to reject our null hypothesis.
+
 > Why do some properties have a much higher value than others when they are located so close to each other? 
+
 * ${\alpha}$ = .05
 
-* ${H_0}$: 
+* ${H_0}$: There is no relationship between home value and area
 
-* ${H_a}$: 
+* ${H_a}$: There is a relationship between home value and area
 
-* Conclusion: 
+* Conclusion: There is enough evidence to reject our null hypothesis. This conclusion holds across all counties within the data
 
 > Why are some properties valued so differently from others when they have nearly the same physical attributes but only differ in location?
+
 * ${\alpha}$ = .05
 
-* ${H_0}$: 
+* ${H_0}$: There is no relationship between home value and estimated tax rate
 
-* ${H_a}$: 
+* ${H_a}$: There is a relationship between home value and estimated tax rate
 
- * Conclusion: 
+* Conclusion: There is enough evidence to reject our null hypothesis. This conclusion holds across all size categories
 
- >Is having 1 bathroom worse than having 2 bedrooms?
+ >Is having one bathroom worse than having two bedrooms?
 * ${\alpha}$ = .05
 
-* ${H_0}$: 
+* ${H_0}$: The mean home value of homes with 1 bathroom is equal or greater than those with 2 bedrooms 
 
-* ${H_a}$: 
+* ${H_a}$: The mean home value of homes with 1 bathroom is less than those with 2 bedrooms
 
- * Conclusion: 
+ * Conclusion: There is enough evidence to reject our null hypothesis. We can confirm that having one bathroom is worse than having two bedrooms.
 
-## Summary of Key Findings
-* 
-* 
-* 
-* 
+## Summary of Key Findings and Takeaways
+* Bedrooms, bathrooms, home_size/area and lower age support higher home values
+* Large numbers of homes in LA County 
+* Estimated Tax rate has negative correlation with home value
 
 ## Pipeline Walkthrough
 ### Plan
@@ -115,15 +114,20 @@ internet_service_type                 | 4225 non-null   object | customer intern
 ### Prepare
 > Univariate exploration: 
 * Basic histograms/boxplot for categories
-> Took care of outliers
+> Take care of outliers
 > Handle any possible threats of data leakage
-> Create dummy vars
+> Feature Engineering *shifted to accomodate removal of outliers*
+* Decades: Columns featuring the decade in which the home was 
+* Age: Columns that have the Age 
+* Size: Column created to categorize homes by size
+* Estimated Tax Rate: Created to estimate a tax rate based off the home_value divided by the tax rate
 > Split data
 > Scale data
 > Collect and collate section *Takeaways*
 > Add appropirate artifacts into `wrangle.py`
 
 ### Explore
+* Removed Year Built, and Tax Amount
 > Bivariate exploration
 * Investigate and visualize *all* features against home value
 > Identify possible areas for feature engineering
@@ -137,6 +141,7 @@ internet_service_type                 | 4225 non-null   object | customer intern
 
 ### Model
 > Ensure all data is scaled
+> Create dummy vars
 > Set up comparison dataframes for evaluation metrics and model descriptions  
 > Set Baseline Prediction and evaluate accuracy  
 > Explore various models and feature combinations.
@@ -146,7 +151,9 @@ internet_service_type                 | 4225 non-null   object | customer intern
 > LASSO + LARS
 * 
 > Polynomial Regression
-* 
+* Alternated through combinations of:
+    - Powers ~ 2, 3
+    - Features ~ Feature Sets 
 > Generalized Linear Model
 * 
 
@@ -154,7 +161,10 @@ internet_service_type                 | 4225 non-null   object | customer intern
 * 
 
 >Choose **one** model to test
-* 
+> MVP Model: Polynomial 2
+* Features: Area, Bedrooms, Bathrooms
+* Polynomial Features Degree: 3
+* Score (r^2): .24
 > Collect and collate section *Takeaways*
 
 ### Deliver
@@ -162,7 +172,7 @@ internet_service_type                 | 4225 non-null   object | customer intern
 > Finalize and upload project repository with appropriate documentation 
 * Verify docstring is implemented for each function within all notebooks and modules 
 > Present to audience of CodeUp instructors and classmates
-* 
+
 
 ## Project Reproduction Requirements
 > Requires personal `env.py` file containing database credentials  

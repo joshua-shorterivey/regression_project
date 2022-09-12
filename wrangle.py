@@ -17,6 +17,16 @@ warnings.filterwarnings("ignore")
 
 #function to acquire zillow data from codeup database --> place in wrangle.py module
 def acquire_zillow():
+    """
+    Purpose
+        To do initial acquisition of zillow data
+
+    Parameters
+        None
+
+    Returns
+        data frame containing the zillow real estate data
+    """
     #create url to access DB
     url = f"mysql+pymysql://{user}:{password}@{host}/zillow"
 
@@ -50,6 +60,12 @@ def acquire_zillow():
 #engineer features
 def engineer_features(df):
     """
+    Purpose
+        To engineer features from data set for exploration and modeling
+    Parameters
+        df: dataframe containing zillow real estate data
+    Returns
+        df: dataframe containing proper features, and with unwanted columns removed
     """
     
     #### Decades: 
@@ -77,7 +93,12 @@ def engineer_features(df):
 # function for removing outliers
 def remove_outliers(df, k, col_list):
     """ 
-    remove outliers from a list of columns in a dataframe and return that dataframe
+    Purpose
+        remove outliers from a list of columns in a dataframe and return that dataframe
+    Parameters
+        df: dataframe
+        k: int, to help control tolerance level for outlier
+        col_list: list, list of columns in which to find outliers
     """
 
     # total number of observations
